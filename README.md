@@ -11,5 +11,7 @@ Simple Zabbix environment for testing purpose written in Docker compose
 
 ### How you can reach services?
 * Zabbix frontend: port **80**
+  * Username: Admin
+  * Password: zabbix
 * PostgreSQL server: **5432**
 * Zabbix server: **10051**
