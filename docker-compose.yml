@@ -1,0 +1,40 @@
+version: '2'
+
+services:
+
+  database:
+    image: "docker.io/postgres:9.4"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: "pw1234"
+      POSTGRES_USER: "zabbix"
+      PGDATA: "/opt/volumes/pgsql"
+
+  zabbix_server:
+    image: "docker.io/zabbix/zabbix-server-pgsql"
+    links:
+      - "database"
+    ports:
+      - "10051:10051"
+    environment:
+      DB_SERVER_HOST: "database"
+      DB_SREVER_PORT: "5432"
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "pw1234"
+      POSTGRES_DB: "zabbix"
+
+  zabbix_web_pgsql:
+    image: "docker.io/zabbix/zabbix-web-apache-pgsql"
+    links:
+      - "database"
+      - "zabbix_server"
+    ports:
+      - "80:80"
+    environment:
+      DB_SERVER_HOST: "database"
+      DB_SERVER_PORT: "5432"
+      ZBX_SERVER_HOST: "zabbix_server"
+      ZBX_SERVER_PORT: "10051"
+      POSTGRES_USER: "zabbix"
+      POSTGRES_PASSWORD: "pw1234"
